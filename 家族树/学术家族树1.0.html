@@ -117,10 +117,27 @@
                             
                         }
                     }
-                    else//添加技能树或公司经历
+                      /*
+                    if(arry.length == 1)//添加技能树或公司经历
                     {
-                        
+                        //提取信息
+                        var id_SkillOrExp = arry[k].split("：");//姓名与技能、经历分组
+                        var Skill_Exp = id_SkillOrExp.split("、");//技能树和经历节点
+                        var Stu = id_SkillOrExp[0];//学生节点
+
+                        for(var i = 0; i < teacher.children.length; i++)
+                        {
+                            for(var j = 0; j < teacher.children[i].children.length; j++)//在建好的树中搜索学生
+                            {
+                                if(Stu == teacher.children[i].children[j]) //匹配
+                                {
+                                    ;
+                                }
+                            }
+                        }
                     }
+                    */
+                    //还是存在bug
                     treeData[k] = [];
                         treeData[k] = teacher;
                         maketree(k);
