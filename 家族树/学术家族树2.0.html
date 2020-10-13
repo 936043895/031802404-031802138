@@ -74,18 +74,19 @@
             }, ]
         }];
 
-        function getdata()//该版本暂时还未实现技能树与公司经历的添加
+        function getdata() //该版本暂时还未实现技能树与公司经历的添加
         {
             var text = $("#text").val(); //获取textarea的全部内容
             var text1 = text.split("\n\n\n");//有多棵树的情况时，进行分组
             //document.write("树数量：" + text1.length + "<br />");
-            for(var j = 0; j<text1.length; j++)
+            for(var tree_num = 0; tree_num < text1.length; tree_num++)
             {
-                var text2 = text1[j].split("\n\n");//对单棵树的内容进行分组，将人员信息和技能树或所在公司历程分开
-                //document.write("人员信息与技能树块数" + text2.length + "<br />"); 
-                for (var k = 0; k < text1.length; k++)  //text1.length用于得到树的数量
+                var text2 = text1[tree_num].split("\n\n");//对单棵树的内容进行分组，将人员信息和技能树或所在公司历程分开
+                //document.write("人员信息与技能树块数" + text2.length + "<br />");
+                for (var k = 0; k < text2.length; k++)  //text1.length用于得到树的数量
                 {
                     var arry = text2[k].split("\n");//针对每一组数据，以“\n"为关键字进行分组，得到每行的信息
+                    //document.write(arry.length);
                     if(arry.length > 1)//当数据内容为人员信息时，arry的长度会大于1,对人员信息先处理后再添加技能树与公司历程
                     {
                         var teacher = 
@@ -131,32 +132,44 @@
                             
                         }
                     }
-                      /*
-                    if(arry.length == 1)//添加技能树或公司经历
+                    //console.log(teacher.children[0]);
+                    //document.write(teacher.children[0].children.length);
+                    
+                    else   //添加技能树或公司经历
                     {
                         //提取信息
-                        var id_SkillOrExp = arry[k].split("：");//姓名与技能、经历分组
-                        var Skill_Exp = id_SkillOrExp.split("、");//技能树和经历节点
+                        //console.log(teacher.children.length);
+                        //console.log(teacher.children[0].children.length);
+                        //console.log(arry);
+                        var id_SkillOrExp = arry[0].split("：");//姓名与技能、经历分组
+                        //var Skill_Exp = id_SkillOrExp[1].split("、");//技能树和经历节点
                         var Stu = id_SkillOrExp[0];//学生节点
-
+                        //console.log("h2");
+                        //console.log(teacher.children.length);
+                        //console.log(teacher.children[0].children.length);
                         for(var i = 0; i < teacher.children.length; i++)
                         {
-                            for(var j = 0; j < teacher.children[i].children.length; j++)//在建好的树中搜索学生
+                            for(var j = 0; j < teacher.children[i].children.length; j++)
                             {
-                                if(Stu == teacher.children[i].children[j]) //匹配
+                                //console.log("hi");
+                                //console.log(teacher.children[i].children[j].name);
+                                if(teacher.children[i].children[j].name == Stu)//名字匹配
                                 {
-                                    ;
+                                    //console.log(Stu);
+                                    teacher.children[i].children[j].skills = id_SkillOrExp[1];
+                                    //console.log(teacher.children[i].children[j]);
                                 }
                             }
                         }
+                        
                     }
-                    */
-                    //还是存在bug
-                    treeData[k] = [];
-                        treeData[k] = teacher;
-                        maketree(k);
                 }
+                    console.log(teacher);
+                    treeData[tree_num] = [];
+                        treeData[tree_num] = teacher;
+                        maketree(tree_num); 
             }
+            //function
         }
 
 //树的初始化
@@ -194,6 +207,7 @@
             root = treeData[k]; //treeData为上边定义的节点属性
             root.x0 = height / 2;
             root.y0 = 0;
+            //console.log(root.children[3]);
 
 
             update(root);
@@ -206,6 +220,7 @@
 
                 // Normalize for fixed-depth.设置y坐标点，每层占180px
                 nodes.forEach(function(d) {
+                //    console.log(d);
                     d.y = d.depth * 180;
                 });
 
@@ -346,6 +361,10 @@
                 } else {
                     d.children = d._children;
                     d._children = null;
+                }
+
+                if (d.skills) {
+                    alert(d.skills);
                 }
                 update(d);
             }
